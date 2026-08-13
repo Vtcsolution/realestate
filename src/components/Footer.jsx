@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   Briefcase,
   Camera,
+  ChevronsRight,
   Mail,
   MapPin,
   MessageCircle,
@@ -11,6 +13,7 @@ import {
   Send,
   Users,
 } from 'lucide-react'
+import Logo from './Logo'
 
 const quickLinks = [
   { label: 'Home', to: '/' },
@@ -29,9 +32,21 @@ const socialLinks = [
   { label: 'YouTube', href: '#', icon: PlayCircle },
 ]
 
+const instagramShots = [
+  'https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=500&q=80',
+  'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=500&q=80',
+  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=500&q=80',
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=500&q=80',
+  'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=500&q=80',
+  'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=500&q=80',
+]
+
+const instagramShotsFull = instagramShots.map((src) => src.replace('w=500', 'w=1600'))
+
 function Footer() {
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+  const [featuredIndex, setFeaturedIndex] = useState(0)
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -42,11 +57,37 @@ function Footer() {
 
   return (
     <footer className="bg-navy text-offwhite">
+      {/* Bold CTA band */}
+      <div className="border-b border-white/10 bg-navy-900 py-20 text-center sm:py-24">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <span className="inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.3em] text-gold">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+            Get In Touch
+          </span>
+          <h2 className="mt-6 text-offwhite">
+            Your Next Address <span className="text-gold">Starts Here.</span>
+          </h2>
+          <div className="mt-9 flex items-center justify-center gap-3">
+            <NavLink
+              to="/contact"
+              className="rounded-full bg-white/10 px-7 py-3.5 font-body text-sm font-semibold uppercase tracking-wide text-offwhite transition-colors hover:bg-white/15"
+            >
+              Contact Us
+            </NavLink>
+            <NavLink
+              to="/contact"
+              aria-label="Contact us"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold text-navy transition-transform duration-300 hover:scale-105 hover:bg-gold-600"
+            >
+              <ChevronsRight size={20} />
+            </NavLink>
+          </div>
+        </div>
+      </div>
+
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 py-16 sm:px-6 md:grid-cols-4 lg:px-8">
         <div className="md:col-span-1">
-          <span className="font-heading text-2xl font-bold text-offwhite">
-            VIP <span className="text-gold">Estates</span>
-          </span>
+          <Logo wordmarkClassName="text-offwhite" markSize={36} />
           <p className="mt-4 max-w-xs font-body text-sm leading-relaxed text-offwhite/70">
             Curated luxury properties and white-glove service for discerning
             clients, worldwide.
@@ -128,6 +169,61 @@ function Footer() {
                 <Icon size={17} />
               </a>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Instagram strip */}
+      <div className="border-t border-white/10 bg-navy-900 pt-10">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 pb-6 sm:px-6 lg:px-8">
+          <p className="font-body text-xs text-offwhite/60">
+            <span className="text-gold">#StayCurrent</span> with us{' '}
+            <span className="text-offwhite/80">@vipestates</span>
+          </p>
+          <a
+            href="#"
+            className="font-body text-xs font-semibold uppercase tracking-wide text-offwhite underline decoration-gold/60 underline-offset-4 transition-colors hover:text-gold"
+          >
+            Follow Us on Instagram
+          </a>
+        </div>
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-2xl shadow-2xl shadow-black/40">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={featuredIndex}
+                src={instagramShotsFull[featuredIndex]}
+                alt={`Featured photo ${featuredIndex + 1}`}
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="h-[280px] w-full object-cover sm:h-[380px]"
+              />
+            </AnimatePresence>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-900/50 via-transparent to-transparent" />
+          </div>
+
+          <div className="mt-4 flex justify-center gap-2.5 pb-10 sm:gap-3">
+            {instagramShots.map((src, index) => {
+              const isFeatured = index === featuredIndex
+              return (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setFeaturedIndex(index)}
+                  aria-label={`Show photo ${index + 1} of ${instagramShots.length}`}
+                  aria-current={isFeatured}
+                  className={`relative h-14 w-14 shrink-0 appearance-none overflow-hidden rounded-xl border-2 transition-all duration-300 sm:h-16 sm:w-16 ${
+                    isFeatured
+                      ? 'scale-110 border-gold opacity-100'
+                      : 'border-transparent opacity-50 hover:opacity-90'
+                  }`}
+                >
+                  <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>

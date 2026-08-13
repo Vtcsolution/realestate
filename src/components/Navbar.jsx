@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { navLinks } from '../data/navLinks'
 import MagneticButton from './MagneticButton'
+import Logo from './Logo'
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -45,8 +46,8 @@ function Navbar() {
         transition={{ duration: 0.3 }}
       >
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <NavLink to="/" className="shrink-0 font-heading text-xl font-bold text-navy">
-            VIP <span className="text-gold">Estates</span>
+          <NavLink to="/" className="shrink-0">
+            <Logo wordmarkClassName="text-navy" />
           </NavLink>
 
           <nav className="hidden lg:flex lg:items-center lg:gap-8">
