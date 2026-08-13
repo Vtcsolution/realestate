@@ -111,13 +111,18 @@ function Blog() {
             key={option}
             type="button"
             onClick={() => handleCategoryChange(option)}
-            className={`rounded-full border px-5 py-2 font-body text-sm font-medium transition-colors ${
-              category === option
-                ? 'border-gold bg-gold text-navy'
-                : 'border-neutral text-charcoal/70 hover:border-gold'
+            className={`relative rounded-full border px-5 py-2 font-body text-sm font-medium transition-colors ${
+              category === option ? 'border-gold text-navy' : 'border-neutral text-charcoal/70 hover:border-gold'
             }`}
           >
-            {option}
+            {category === option && (
+              <motion.span
+                layoutId="blogCategoryPill"
+                className="absolute inset-0 rounded-full bg-gold"
+                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+              />
+            )}
+            <span className="relative z-10">{option}</span>
           </button>
         ))}
       </div>

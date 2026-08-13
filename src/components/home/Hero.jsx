@@ -179,13 +179,18 @@ function Hero() {
                   setActiveTab(tab)
                   setIsPanelOpen(false)
                 }}
-                className={`rounded-full px-5 py-2 font-body text-xs font-semibold uppercase tracking-wide transition-colors sm:text-sm ${
-                  activeTab === tab
-                    ? 'bg-white text-navy shadow'
-                    : 'text-offwhite/80 hover:text-white'
+                className={`relative rounded-full px-5 py-2 font-body text-xs font-semibold uppercase tracking-wide transition-colors sm:text-sm ${
+                  activeTab === tab ? 'text-navy' : 'text-offwhite/80 hover:text-white'
                 }`}
               >
-                {tab}
+                {activeTab === tab && (
+                  <motion.span
+                    layoutId="heroTabPill"
+                    className="absolute inset-0 rounded-full bg-white shadow"
+                    transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10">{tab}</span>
               </button>
             ))}
           </div>
@@ -310,13 +315,20 @@ function Hero() {
                                 key={option}
                                 type="button"
                                 onClick={() => setPanel((prev) => ({ ...prev, bedrooms: option }))}
-                                className={`rounded-full border px-3.5 py-1.5 font-body text-sm transition-colors ${
+                                className={`relative rounded-full border px-3.5 py-1.5 font-body text-sm transition-colors ${
                                   panel.bedrooms === option
-                                    ? 'border-gold bg-gold text-navy font-medium'
+                                    ? 'border-gold text-navy font-medium'
                                     : 'border-neutral text-charcoal/70 hover:border-gold'
                                 }`}
                               >
-                                {option}
+                                {panel.bedrooms === option && (
+                                  <motion.span
+                                    layoutId="heroBedPill"
+                                    className="absolute inset-0 rounded-full bg-gold"
+                                    transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                                  />
+                                )}
+                                <span className="relative z-10">{option}</span>
                               </button>
                             ))}
                           </div>
@@ -331,13 +343,20 @@ function Hero() {
                                 key={option}
                                 type="button"
                                 onClick={() => setPanel((prev) => ({ ...prev, bathrooms: option }))}
-                                className={`rounded-full border px-3.5 py-1.5 font-body text-sm transition-colors ${
+                                className={`relative rounded-full border px-3.5 py-1.5 font-body text-sm transition-colors ${
                                   panel.bathrooms === option
-                                    ? 'border-gold bg-gold text-navy font-medium'
+                                    ? 'border-gold text-navy font-medium'
                                     : 'border-neutral text-charcoal/70 hover:border-gold'
                                 }`}
                               >
-                                {option}
+                                {panel.bathrooms === option && (
+                                  <motion.span
+                                    layoutId="heroBathPill"
+                                    className="absolute inset-0 rounded-full bg-gold"
+                                    transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                                  />
+                                )}
+                                <span className="relative z-10">{option}</span>
                               </button>
                             ))}
                           </div>

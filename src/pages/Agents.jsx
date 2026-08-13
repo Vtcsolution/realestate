@@ -47,13 +47,18 @@ function Agents() {
             key={option}
             type="button"
             onClick={() => setSpecialty(option)}
-            className={`rounded-full border px-5 py-2 font-body text-sm font-medium transition-colors ${
-              specialty === option
-                ? 'border-gold bg-gold text-navy'
-                : 'border-neutral text-charcoal/70 hover:border-gold'
+            className={`relative rounded-full border px-5 py-2 font-body text-sm font-medium transition-colors ${
+              specialty === option ? 'border-gold text-navy' : 'border-neutral text-charcoal/70 hover:border-gold'
             }`}
           >
-            {option}
+            {specialty === option && (
+              <motion.span
+                layoutId="agentsSpecialtyPill"
+                className="absolute inset-0 rounded-full bg-gold"
+                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+              />
+            )}
+            <span className="relative z-10">{option}</span>
           </button>
         ))}
       </div>

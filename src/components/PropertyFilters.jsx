@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { AMENITY_META } from '../lib/amenities'
 import DualRangeSlider from './DualRangeSlider'
 
@@ -23,23 +24,31 @@ function FilterSection({ title, children }) {
   )
 }
 
-function PillGroup({ options, value, onChange }) {
+function PillGroup({ options, value, onChange, layoutId }) {
   return (
     <div className="flex flex-wrap gap-2">
-      {options.map((option) => (
-        <button
-          key={option}
-          type="button"
-          onClick={() => onChange(option)}
-          className={`rounded-full border px-3.5 py-1.5 text-sm transition-colors ${
-            value === option
-              ? 'border-gold bg-gold font-medium text-navy'
-              : 'border-neutral text-charcoal/70 hover:border-gold'
-          }`}
-        >
-          {option}
-        </button>
-      ))}
+      {options.map((option) => {
+        const isActive = value === option
+        return (
+          <button
+            key={option}
+            type="button"
+            onClick={() => onChange(option)}
+            className={`relative rounded-full border px-3.5 py-1.5 text-sm transition-colors ${
+              isActive ? 'border-gold font-medium text-navy' : 'border-neutral text-charcoal/70 hover:border-gold'
+            }`}
+          >
+            {isActive && (
+              <motion.span
+                layoutId={layoutId}
+                className="absolute inset-0 rounded-full bg-gold"
+                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+              />
+            )}
+            <span className="relative z-10">{option}</span>
+          </button>
+        )
+      })}
     </div>
   )
 }
@@ -80,6 +89,7 @@ function PropertyFilters({ filters, onChange, priceBounds, areaBounds, locations
           options={PURPOSE_OPTIONS}
           value={filters.purpose || 'Any'}
           onChange={(value) => onChange({ ...filters, purpose: value === 'Any' ? '' : value })}
+          layoutId="filterPurposePill"
         />
       </FilterSection>
 
@@ -128,6 +138,7 @@ function PropertyFilters({ filters, onChange, priceBounds, areaBounds, locations
           options={BED_OPTIONS}
           value={filters.bedrooms}
           onChange={(value) => onChange({ ...filters, bedrooms: value })}
+          layoutId="filterBedroomsPill"
         />
       </FilterSection>
 
@@ -136,6 +147,7 @@ function PropertyFilters({ filters, onChange, priceBounds, areaBounds, locations
           options={BATH_OPTIONS}
           value={filters.bathrooms}
           onChange={(value) => onChange({ ...filters, bathrooms: value })}
+          layoutId="filterBathroomsPill"
         />
       </FilterSection>
 
