@@ -1,6 +1,7 @@
 import Hero from '../components/home/Hero'
 import FeaturedProperties from '../components/home/FeaturedProperties'
 import WhyChooseUs from '../components/home/WhyChooseUs'
+import VideoShowcase from '../components/home/VideoShowcase'
 import ExploreCategories from '../components/home/ExploreCategories'
 import TestimonialsPreview from '../components/home/TestimonialsPreview'
 import CtaBanner from '../components/home/CtaBanner'
@@ -17,6 +18,7 @@ function Home() {
       <Hero />
       <FeaturedProperties />
       <WhyChooseUs />
+      <VideoShowcase />
       <ExploreCategories />
       <TestimonialsPreview />
       <CtaBanner />

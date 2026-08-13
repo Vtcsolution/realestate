@@ -20,6 +20,13 @@ const propertyTypes = [
 const bedOptions = ['All', 'Studio', '1', '2', '3', '4']
 const bathOptions = ['All', '1', '2', '3', '4']
 
+const HERO_VIDEO_SRC = '/videos/realestate_idea.mp4'
+const HERO_POSTER =
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80'
+
+const prefersReducedMotion =
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
 const priceFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -94,15 +101,25 @@ function Hero() {
     >
       <div className="absolute inset-0 overflow-hidden">
         <motion.div style={{ y: parallaxY }} className="absolute inset-0">
-          <motion.img
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"
-            alt="Luxury modernist villa at dusk"
-            initial={{ scale: 1 }}
-            whileInView={{ scale: 1.08 }}
-            viewport={{ once: false, amount: 0 }}
-            transition={{ duration: 26, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
-            className="h-full w-full object-cover will-change-transform"
-          />
+          {prefersReducedMotion ? (
+            <img
+              src={HERO_POSTER}
+              alt="Luxury modernist villa at dusk"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <video
+              src={HERO_VIDEO_SRC}
+              poster={HERO_POSTER}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-label="Aerial video tour of a luxury modernist villa"
+              className="h-full w-full object-cover"
+            />
+          )}
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-navy-900/70 via-navy-900/50 to-navy-900/80" />
       </div>
