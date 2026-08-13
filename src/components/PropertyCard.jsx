@@ -1,9 +1,12 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Bath, Bed, MapPin, Ruler } from 'lucide-react'
 import WhatsAppIcon from './icons/WhatsAppIcon'
 import { resizeImage } from '../lib/imageUrl'
+import { useTilt } from '../lib/useTilt'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -18,13 +21,38 @@ const WHATSAPP_NUMBER = '12125550198'
 
 function PropertyCard({ property, imageOnly = false }) {
   const { id, title, location, price, bedrooms, bathrooms, area, images } = property
+  const tilt = useTilt({ max: 6, hoverScale: 1.015 })
+  const swiperRef = useRef(null)
 
   const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `Hi, I'm interested in ${title} (${location}). Could you share more details?`,
   )}`
 
+  const handleCardEnter = (event) => {
+    tilt.handlers.onMouseEnter?.(event)
+    swiperRef.current?.autoplay?.start()
+  }
+  const handleCardLeave = (event) => {
+    tilt.handlers.onMouseLeave?.(event)
+    swiperRef.current?.autoplay?.stop()
+  }
+
   return (
-    <article className="group overflow-hidden rounded-2xl border border-neutral-light bg-white shadow-sm transition-transform duration-300 will-change-transform hover:-translate-y-2">
+    <motion.article
+      ref={tilt.ref}
+      onMouseMove={tilt.handlers.onMouseMove}
+      onMouseEnter={handleCardEnter}
+      onMouseLeave={handleCardLeave}
+      style={tilt.style}
+      className="group relative overflow-hidden rounded-2xl border border-neutral-light bg-white shadow-sm transition-shadow duration-300 will-change-transform hover:shadow-xl"
+    >
+      {tilt.enabled && (
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute z-10 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white blur-2xl mix-blend-overlay"
+          style={{ left: tilt.glareX, top: tilt.glareY, opacity: tilt.glareOpacity }}
+        />
+      )}
       <div className="relative aspect-[4/3] overflow-hidden">
         {imageOnly ? (
           <img
@@ -36,10 +64,16 @@ function PropertyCard({ property, imageOnly = false }) {
           />
         ) : (
           <Swiper
-            modules={[Navigation, Pagination]}
+            modules={[Navigation, Pagination, Autoplay]}
             style={{ '--swiper-theme-color': '#C9A227', '--swiper-navigation-size': '16px' }}
             navigation
             pagination={{ clickable: true }}
+            loop={images.length > 1}
+            autoplay={{ delay: 1100, disableOnInteraction: false }}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper
+              swiper.autoplay.stop()
+            }}
             className="carousel-nav-hint h-full w-full"
           >
             {images.map((image, index) => (
@@ -107,7 +141,7 @@ function PropertyCard({ property, imageOnly = false }) {
           </Link>
         </div>
       </div>
-    </article>
+    </motion.article>
   )
 }
 

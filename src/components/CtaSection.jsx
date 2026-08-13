@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { fadeInUp, staggerContainer } from '../lib/motion'
+import MagneticButton from './MagneticButton'
 
 function CtaSection({
   title,
@@ -32,7 +33,7 @@ function CtaSection({
           variants={fadeInUp}
           className="mt-8 flex flex-wrap items-center justify-center gap-4"
         >
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+          <MagneticButton strength={0.35}>
             <Link
               to={primaryTo}
               className="flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 font-body text-sm font-semibold text-offwhite transition-colors hover:bg-navy-600"
@@ -40,16 +41,16 @@ function CtaSection({
               {primaryLabel}
               <ArrowRight size={16} />
             </Link>
-          </motion.div>
+          </MagneticButton>
           {secondaryLabel && (
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <MagneticButton strength={0.35}>
               <Link
                 to={secondaryTo}
-                className="rounded-full border border-navy/30 px-7 py-3.5 font-body text-sm font-semibold text-navy transition-colors hover:bg-navy/10"
+                className="inline-block rounded-full border border-navy/30 px-7 py-3.5 font-body text-sm font-semibold text-navy transition-colors hover:bg-navy/10"
               >
                 {secondaryLabel}
               </Link>
-            </motion.div>
+            </MagneticButton>
           )}
         </motion.div>
       </motion.div>

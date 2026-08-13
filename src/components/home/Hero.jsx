@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Hash, RotateCcw, Search, SlidersHorizontal } from 'lucide-react'
 import { fadeInUp, staggerContainer } from '../../lib/motion'
 import { AREA_BOUNDS, PRICE_BOUNDS, VIEWS } from '../../lib/propertyBounds'
@@ -40,6 +40,12 @@ const initialPanelState = {
 
 function Hero() {
   const navigate = useNavigate()
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  })
+  const parallaxY = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
   const [activeTab, setActiveTab] = useState('Buy')
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [propertyType, setPropertyType] = useState('')
@@ -82,19 +88,37 @@ function Hero() {
   }
 
   return (
-    <section className="relative -mt-20 flex flex-col pb-10 pt-32 sm:pb-14 sm:pt-36 lg:min-h-dvh lg:flex-row lg:items-center lg:pb-28 lg:pt-20">
+    <section
+      ref={sectionRef}
+      className="relative -mt-20 flex flex-col pb-10 pt-32 sm:pb-14 sm:pt-36 lg:min-h-dvh lg:flex-row lg:items-center lg:pb-28 lg:pt-20"
+    >
       <div className="absolute inset-0 overflow-hidden">
-        <motion.img
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"
-          alt="Luxury modernist villa at dusk"
-          initial={{ scale: 1 }}
-          whileInView={{ scale: 1.08 }}
-          viewport={{ once: false, amount: 0 }}
-          transition={{ duration: 26, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
-          className="h-full w-full object-cover will-change-transform"
-        />
+        <motion.div style={{ y: parallaxY }} className="absolute inset-0">
+          <motion.img
+            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"
+            alt="Luxury modernist villa at dusk"
+            initial={{ scale: 1 }}
+            whileInView={{ scale: 1.08 }}
+            viewport={{ once: false, amount: 0 }}
+            transition={{ duration: 26, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
+            className="h-full w-full object-cover will-change-transform"
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-navy-900/70 via-navy-900/50 to-navy-900/80" />
       </div>
+
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[8%] top-[18%] hidden h-40 w-40 rounded-full border border-gold/30 lg:block"
+        animate={{ y: [0, -18, 0], rotate: [0, 10, 0] }}
+        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[6%] top-[55%] hidden h-24 w-24 rounded-full border border-gold/20 lg:block"
+        animate={{ y: [0, 16, 0], rotate: [0, -12, 0] }}
+        transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+      />
 
       <motion.div
         variants={staggerContainer()}
@@ -110,7 +134,7 @@ function Hero() {
           VIP Estates
         </motion.span>
         <motion.h1 variants={fadeInUp} className="mt-6 text-offwhite">
-          Discover <span className="text-gold">Extraordinary</span> Living
+          Discover <span className="text-shimmer">Extraordinary</span> Living
         </motion.h1>
         <motion.p
           variants={fadeInUp}

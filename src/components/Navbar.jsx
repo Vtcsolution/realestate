@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { navLinks } from '../data/navLinks'
+import MagneticButton from './MagneticButton'
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -71,12 +72,14 @@ function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <NavLink
-              to="/contact"
-              className="hidden rounded-full bg-gold px-5 py-2.5 font-body text-sm font-medium text-navy transition-all duration-300 hover:scale-[1.05] hover:bg-gold-600 active:scale-[0.96] lg:inline-block"
-            >
-              Book a Visit
-            </NavLink>
+            <MagneticButton className="hidden lg:inline-block" strength={0.4}>
+              <NavLink
+                to="/contact"
+                className="inline-block rounded-full bg-gold px-5 py-2.5 font-body text-sm font-medium text-navy transition-colors duration-300 hover:bg-gold-600"
+              >
+                Book a Visit
+              </NavLink>
+            </MagneticButton>
             <button
               type="button"
               aria-label="Open menu"
